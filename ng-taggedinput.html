@@ -1,0 +1,62 @@
+<html ng-app="myapp">
+<head>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+ <style>
+html {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+.tagcontainer {
+    border:solid thin black;
+    width:400px;
+    cursor: text;
+    overflow:auto;
+    padding: 1px;
+}
+.tagcontainer input.tag {
+    width:200px;
+    border: medium none;
+    font-size: 1em;
+}
+.tagcontainer .tag {
+    float: left;
+    margin: 2px;
+    height:14px;
+}
+.tagcontainer div.tag {
+    background-color: #f0f0f0;
+    white-space: nowrap;
+}
+ </style>
+<script>
+var myApp = angular.module('myapp', []);
+myApp.controller('MyController', function($scope) {
+    $scope.suggestedtags = [];
+    $scope.mytags = [];
+    $scope.newtag = '';
+    $scope.addval = function($event,val) {
+        if ($event.keyCode == 188) {
+            val = val.split(',')[0];
+            $scope.mytags.push(val);
+            $scope.newtag = '';
+            return '';
+        }
+    };
+});
+</script>
+</head>
+<body>
+    <div id='body' ng-controller="MyController">
+      <div class='tagcontainer'>
+          <div class='tag' ng-repeat="tag in mytags">
+              <span>{{tag}}</span>
+              <img width=14 height=14 src='http://comedy-lounge.com/icons/shared/failed-sm.gif' ng-click='del_tag("{{tag}}")'></img>
+          </div>
+          <input class='tag' ng-model="newtag" list="SuggestedTags" type="text" ng-keyup="addval($event,newtag);"/>
+      </div>
+      <datalist id="SuggestedTags">
+        <option ng-repeat='tag in suggestedtags' value="{{tag}}">{{tag}}</option>
+      </datalist>
+    </div>
+</body>
+</html>
