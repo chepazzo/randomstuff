@@ -33,18 +33,38 @@ e.g.
 ...     }
 ...   }
 ... }
->>> _find_val(config,'hair.style.color')
+>>> deep_get(config,'hair.style.color')
 ['red']
->>> _find_val(config,'people.age')
+>>> deep_get(config,'people.age')
 ['5', '3']
->>> _find_val(config,'people.phone.number')
+>>> deep_get(config,'people.phone.number')
 ['mikecell', 'mikehome', 'bobcell', 'bobcell']
->>> _find_val(config,'peole.phone.number')
+>>> deep_get(config,'peole.phone.number')
 []
 
 '''
 
 def deep_get(dic,val,default=None):
+    '''
+    Provides deep_get function for getting data from dictionaries.
+    
+    Returns a list of results, because if your deep path includes lists, 
+    you will have multiple results).
+    
+    If any part of the path is an invalid key, then [] is returned.
+    
+    e.g.
+      deep_get(config,'people.age')
+        returns the equivalent of: [ c['age'] for c in config['people'] ]
+      deep_get(config,'people.phone.number')
+        returns the equivalent of:
+         [ 
+            config['people'][0]['phone'][0]['number'],
+            config['people'][0]['phone'][1]['number'],
+            config['people'][1]['phone'][0]['number'],
+            config['people'][1]['phone'][1]['number'],
+         ]
+    '''
     path = val.split('.')
     currlevels = [ dic ]
     def _getval(dic,p):
